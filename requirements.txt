@@ -1,1 +1,2 @@
 fastapi~=0.95.2
+sqlalchemy~=2.0.14
