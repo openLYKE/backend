@@ -22,6 +22,10 @@ class UserBase(BaseModel):
     username: str
 
 
+class UserCreate(UserBase):
+    pass
+
+
 class User(PostBase):
     id: int
     items: list[Post] = []
