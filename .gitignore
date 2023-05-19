@@ -8,3 +8,4 @@
 /dataSources/
 /dataSources.local.xml
 .env
+/__pycache__/
