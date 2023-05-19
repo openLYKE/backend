@@ -1,16 +1,16 @@
 from pydantic import BaseModel
 
 
-class ItemBase(BaseModel):
+class PostBase(BaseModel):
     title: str
     description: str | None = None
 
 
-class ItemCreate(ItemBase):
+class PostCreate(PostBase):
     pass
 
 
-class Item(ItemBase):
+class Post(PostBase):
     id: int
     owner_id: int
 
@@ -19,17 +19,12 @@ class Item(ItemBase):
 
 
 class UserBase(BaseModel):
-    email: str
+    username: str
 
 
-class UserCreate(UserBase):
-    password: str
-
-
-class User(UserBase):
+class User(PostBase):
     id: int
-    is_active: bool
-    items: list[Item] = []
+    items: list[Post] = []
 
     class Config:
         orm_mode = True
