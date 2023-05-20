@@ -1,1 +1,1 @@
-web: uvicorn --app-dir app main:app --workers 4 
+web: python app/main.py
