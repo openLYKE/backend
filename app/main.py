@@ -90,6 +90,7 @@ def sql(db: Session = Depends(get_db)):
     final = []
     for i in ret:
         post = crud.get_post(db, post_id=i)
+        post.description = "This is a post"
         final.append(post)
 
     return final
