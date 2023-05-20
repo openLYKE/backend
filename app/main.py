@@ -1,5 +1,6 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import text
 
 import uvicorn
 import os
@@ -70,6 +71,17 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 @app.get("/algo/{user_id}")
 def test(user_id: int, db: Session = Depends(get_db)):
     return get_posts_from_tag(db, user_id)
+
+
+@app.get("/sql")
+def sql(db: Session = Depends(get_db)):
+    rs = db.execute(text("SELECT count(*) as count FROM users"))
+
+    ret = []
+    for row in rs:
+        ret.append(row.count)
+
+    return ret
 
 
 if __name__ == "__main__":
