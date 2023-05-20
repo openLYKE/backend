@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 
 
-
 class TagUserBase(BaseModel):
     name: str = ""
+    negative: bool = False
 
 
 class TagUserCreate(TagUserBase):
@@ -52,8 +52,9 @@ class Post(PostBase):
     class Config:
         orm_mode = True
 
+
 class UserBase(BaseModel):
-    username: str
+    username: str = ""
 
 
 class UserCreate(UserBase):

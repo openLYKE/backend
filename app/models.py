@@ -15,6 +15,7 @@ class TagUser(Base):
     __tablename__ = "tags_user"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+    negative = Column(Boolean, index=True, default=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="tags")
 

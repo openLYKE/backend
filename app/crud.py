@@ -34,3 +34,12 @@ def create_user_post(db: Session, post: schemas.PostCreate, user_id: int):
     db.commit()
     db.refresh(db_item)
     return db_item
+
+
+def get_user_feed(db: Session, user_id: int):
+
+
+    posts = db.query(models.Post).offset()
+
+
+    pass
