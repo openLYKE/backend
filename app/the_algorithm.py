@@ -82,8 +82,6 @@ def algo(db, user_id, rand: float, popular: float, friends: float, tags: float):
         posts.append(tags_posts)
 
 
-        for post in posts:
-            if post.tags
 
 
         pass
