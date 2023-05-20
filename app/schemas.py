@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class PostBase(BaseModel):
     title: str
-    description: str | None = None
+    description: str 
 
 
 class PostCreate(PostBase):
