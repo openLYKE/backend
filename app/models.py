@@ -10,16 +10,19 @@ class User(Base):
     posts = relationship("Post", back_populates="owner")
     tags = relationship("TagUser", back_populates="owner")
     likes = relationship("Like", back_populates="user")
-    follower = relationship("Follow", back_populates="user")
-    following = relationship("Follow", back_populates="follows")
+    follower = relationship("Follow", back_populates="follows", foreign_keys="Follow.follows_id")
+    following = relationship("Follow", back_populates="user", foreign_keys="Follow.user_id")
+
 
 class Follow(Base):
     __tablename__ = "follows"
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    user = relationship("User", back_populates="user")
     follows_id = Column(Integer, ForeignKey("users.id"))
-    follows = relationship("User", back_populates="follows")
+    user = relationship("User", back_populates="follower", foreign_keys=[user_id])
+    follows = relationship("User", back_populates="following", foreign_keys=[follows_id])
+
+
 
 
 class TagUser(Base):
