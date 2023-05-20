@@ -1,22 +1,6 @@
 from pydantic import BaseModel
 
 
-class PostBase(BaseModel):
-    title: str = ""
-    description: str = ""
-
-
-class PostCreate(PostBase):
-    pass
-
-
-class Post(PostBase):
-    id: int
-    owner_id: int
-
-    class Config:
-        orm_mode = True
-
 
 class TagUserBase(BaseModel):
     name: str = ""
@@ -49,6 +33,23 @@ class TagPost(TagPostCreate):
     class Config:
         orm_mode = True
 
+
+class PostBase(BaseModel):
+    title: str = ""
+    description: str = ""
+
+
+class PostCreate(PostBase):
+    pass
+
+
+class Post(PostBase):
+    id: int
+    owner_id: int
+    tags: list[TagPost] = []
+
+    class Config:
+        orm_mode = True
 
 class UserBase(BaseModel):
     username: str
