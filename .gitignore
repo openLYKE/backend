@@ -9,3 +9,4 @@
 /dataSources.local.xml
 .env
 /__pycache__/
+app/__pycache__/
