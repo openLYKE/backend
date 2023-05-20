@@ -60,7 +60,8 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: int
-    items: list[Post] = []
+    posts: list[Post] = []
+    tags: list[TagUser] = []
 
     class Config:
         orm_mode = True

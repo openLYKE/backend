@@ -7,23 +7,24 @@ class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(255), unique=True, index=True)
-    items = relationship("Post", back_populates="owner")
-    tags = relationship("Tag", back_populates="owner")
-
+    posts = relationship("Post", back_populates="owner")
+    tags = relationship("TagUser", back_populates="owner")
 
 
 class TagUser(Base):
+    __tablename__ = "tags_user"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
-    owner = relationship("User", back_populates="users")
+    owner = relationship("User", back_populates="tags")
 
 
 class TagPost(Base):
+    __tablename__ = "tags_post"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    owner_id = Column(Integer, ForeignKey("post.id"))
-    owner = relationship("Post", back_populates="posts")
+    owner_id = Column(Integer, ForeignKey("posts.id"))
+    owner = relationship("Post", back_populates="tags")
 
 
 class Post(Base):
@@ -32,4 +33,6 @@ class Post(Base):
     title = Column(String(255), index=True)
     description = Column(String(255), index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
-    owner = relationship("User", back_populates="users")
+    owner = relationship("User", back_populates="posts")
+    tags = relationship("TagPost", back_populates="owner")
+
