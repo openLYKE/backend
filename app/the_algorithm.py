@@ -50,5 +50,40 @@ def get_posts_from_tag(db: Session, user_id: int):
 def get_post_from_friends():
     pass
 
-def algo(rand: float, popular: float, friends: float, tags: float):
+
+def get_friends_posts(db):
+    pass
+
+
+def algo(db, user_id, rand: float, popular: float, friends: float, tags: float):
     COUNT = 100
+    posts = []
+
+    if (rand != 0):
+        random_posts = get_random_posts(db)
+
+        posts.append(random_posts)
+
+    if (popular != 0):
+        popular_posts = get_popular_posts(db)
+
+
+        posts.append(popular_posts)
+
+    if (friends != 0):
+        friends_post = get_friends_posts(db)
+
+
+        posts.append(popular_posts)
+
+    if (tags != 0):
+        tags_posts = get_posts_from_tag(db, user_id)
+
+        posts.append(tags_posts)
+
+
+        for post in posts:
+            if post.tags
+
+
+        pass
