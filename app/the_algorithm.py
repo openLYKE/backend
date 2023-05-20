@@ -14,21 +14,27 @@ def get_popular(db: Session):
 
 
 def get_posts_from_tag(db: Session, user_id: int):
+    print("ALGO")
     posts = db.query(models.Post).all()
     tags = db.query(models.TagUser).filter(models.TagUser.owner_id == user_id).all()
 
-    hashmap = {}
+    ret = []
 
     for post in posts:
         counter = 0
         for tag in tags:
-            if tag in post.tags:
-                counter += 1
-        hashmap[post] = counter
+            for posttag in post.tags:
+                if tag.name == posttag.name:
+                    counter += 1
+        ret.append({"post" : post, "count" : counter})
 
-    print(hashmap)
+    print(ret)
 
-    return hashmap
+    ret.sort(key=lambda x: x["count"], reverse=True)
+
+    print(ret)
+
+    return ret
 
 
 def algo(rand: float, popular: float, friends: float, tags: float):

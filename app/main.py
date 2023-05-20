@@ -67,7 +67,7 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return posts
 
 
-@app.get("algo/{user_id}")
+@app.get("/algo/{user_id}")
 def test(user_id: int, db: Session = Depends(get_db)):
     return get_posts_from_tag(db, user_id)
 
