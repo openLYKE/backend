@@ -43,6 +43,22 @@ class PostCreate(PostBase):
     pass
 
 
+class FollowBase(BaseModel):
+    pass
+
+
+class FollowCreate(FollowBase):
+    pass
+
+
+class Follow(FollowCreate):
+    id: int
+    user_id: int
+    follows_id: int
+
+    class Config:
+        orm_mode = True
+
 class LikeBase(BaseModel):
     pass
 
@@ -84,6 +100,8 @@ class User(UserBase):
     posts: list[Post] = []
     tags: list[TagUser] = []
     likes: list[Like] = []
+    follower: list[Follow] = []
+    following: list[Follow] = []
 
     class Config:
         orm_mode = True
