@@ -2,8 +2,8 @@ from pydantic import BaseModel
 
 
 class PostBase(BaseModel):
-    title: str
-    description: str 
+    title: str = ""
+    description: str = ""
 
 
 class PostCreate(PostBase):
@@ -28,7 +28,7 @@ class UserCreate(UserBase):
 
 class User(PostBase):
     id: int
-    items: list[Post] 
+    items: list[Post] = []
 
     class Config:
         orm_mode = True
