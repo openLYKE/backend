@@ -47,6 +47,7 @@ class Post(PostBase):
     id: int
     owner_id: int
     tags: list[TagPost] = []
+    photo_url: str = ""
 
     class Config:
         orm_mode = True
