@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class TagUserBase(BaseModel):
     name: str = ""
-    negative: bool = False
+    preference: int = 1
 
 
 class TagUserCreate(TagUserBase):
