@@ -30,6 +30,7 @@ class TagPost(Base):
 class Post(Base):
     __tablename__ = "posts"
     id = Column(Integer, primary_key=True, index=True)
+    photo_url = Column(String(255), index=True, default="https://images.lmu.social/42.jpg")
     title = Column(String(255), index=True)
     description = Column(String(255), index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
