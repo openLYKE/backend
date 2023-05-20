@@ -72,21 +72,27 @@ def test(user_id: int, db: Session = Depends(get_db)):
     return the_algorithm.get_popular_posts(db)
 
 
-@app.get("/sql")
+@app.get("/sql", response_model=list[schemas.Post])
 def sql(db: Session = Depends(get_db)):
     my_id = 1
     rs = db.execute(text("""
     select p.*
     from posts p, follows f, likes l
-    where f.user_id = 1
+    where f.user_id = 2
     and f.follows_id = l.user_id
     and l.post_id = p.id
     """))
 
     ret = []
     for row in rs:
-        ret.append({"id": row.id, "count": row.title})
-    return ret
+        ret.append(row.id)
+
+    final = []
+    for i in ret:
+        post = crud.get_post(db, post_id=i)
+        final.append(post)
+
+    return final
 
 
 if __name__ == "__main__":
