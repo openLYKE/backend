@@ -9,8 +9,7 @@ import crud
 import schemas
 from database import engine, SessionLocal
 
-from the_algorithm import get_posts_from_tag
-
+import the_algorithm
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -70,17 +69,20 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 @app.get("/algo/{user_id}")
 def test(user_id: int, db: Session = Depends(get_db)):
-    return get_posts_from_tag(db, user_id)
+    return the_algorithm.get_popular_posts(db)
 
 
 @app.get("/sql")
 def sql(db: Session = Depends(get_db)):
-    rs = db.execute(text("SELECT count(*) as count FROM users"))
+    rs = db.execute(text("""
+    select post_id as id, count(post_id) as count from likes
+        group by likes.post_id
+        order by count(post_id) desc
+    """))
 
     ret = []
     for row in rs:
-        ret.append(row.count)
-
+        ret.append({"id": row.id, "count": row.count})
     return ret
 
 
