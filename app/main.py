@@ -1,7 +1,8 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
-import uvicorn,os
+import uvicorn
+import os
 import models
 import crud
 import schemas
@@ -24,6 +25,7 @@ def get_db():
 @app.post("/users/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_username(db, username=user.username)
+    print(db_user)
     if db_user:
         raise HTTPException(
             status_code=400, detail="Username already registered")
@@ -58,4 +60,5 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=os.getenv("PORT", default=5000), log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=os.getenv(
+        "PORT", default=8000), log_level="info")

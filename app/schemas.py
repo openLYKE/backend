@@ -18,6 +18,38 @@ class Post(PostBase):
         orm_mode = True
 
 
+class TagUserBase(BaseModel):
+    name: str = ""
+
+
+class TagUserCreate(TagUserBase):
+    pass
+
+
+class TagUser(TagUserCreate):
+    id: int
+    owner_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class TagPostBase(BaseModel):
+    name: str = ""
+
+
+class TagPostCreate(TagPostBase):
+    pass
+
+
+class TagPost(TagPostCreate):
+    id: int
+    owner_id: int
+
+    class Config:
+        orm_mode = True
+
+
 class UserBase(BaseModel):
     username: str
 
@@ -26,7 +58,7 @@ class UserCreate(UserBase):
     pass
 
 
-class User(PostBase):
+class User(UserBase):
     id: int
     items: list[Post] = []
 
