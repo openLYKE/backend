@@ -9,12 +9,14 @@ class User(Base):
     username = Column(String(255), unique=True, index=True)
     posts = relationship("Post", back_populates="owner")
     tags = relationship("TagUser", back_populates="owner")
+    likes = relationship("Like", back_populates="user")
 
 
 class TagUser(Base):
     __tablename__ = "tags_user"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+    preference = Column(Integer, index=True, default=1)  # 1 = neutral, 0 = negative, 2: positive
     owner_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="tags")
 
@@ -36,4 +38,13 @@ class Post(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="posts")
     tags = relationship("TagPost", back_populates="owner")
+    likes = relationship("Like", back_populates="post")
 
+
+class Like(Base):
+    __tablename__ = "likes"
+    id = Column(Integer, primary_key=True, index=True)
+    post_id = Column(Integer, ForeignKey("posts.id"))
+    post = relationship("Post", back_populates="likes")
+    user_id = Column(Integer, ForeignKey("users.id"))
+    user = relationship("User", back_populates="likes")

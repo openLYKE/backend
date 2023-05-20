@@ -8,6 +8,8 @@ import crud
 import schemas
 from database import engine, SessionLocal
 
+from the_algorithm import get_posts_from_tag
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -38,6 +40,12 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return users
 
 
+@app.get("/feed/{user_id}", response_model=list[schemas.Post])
+def feed_user(user_id: int, db: Session = Depends(get_db)):
+    posts = crud.get_user_feed(db, user_id=user_id)
+    return posts
+
+
 @app.get("/users/{user_id}", response_model=schemas.User)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
@@ -55,8 +63,13 @@ def create_item_for_user(
 
 @app.get("/posts/", response_model=list[schemas.Post])
 def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    items = crud.get_posts(db, skip=skip, limit=limit)
-    return items
+    posts = crud.get_posts(db, skip=skip, limit=limit)
+    return posts
+
+
+@app.get("/algo/{user_id}")
+def test(user_id: int, db: Session = Depends(get_db)):
+    return get_posts_from_tag(db, user_id)
 
 
 if __name__ == "__main__":
