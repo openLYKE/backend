@@ -1,8 +1,10 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
-from . import crud, models, schemas
-from .database import SessionLocal, engine
+import models
+import crud
+import schemas
+from database import engine, SessionLocal
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -22,7 +24,8 @@ def get_db():
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_username(db, username=user.username)
     if db_user:
-        raise HTTPException(status_code=400, detail="Username already registered")
+        raise HTTPException(
+            status_code=400, detail="Username already registered")
     return crud.create_user(db=db, user=user)
 
 
@@ -42,7 +45,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 @app.post("/users/{user_id}/posts/", response_model=schemas.Post)
 def create_item_for_user(
-    user_id: int, post: schemas.PostCreate, db: Session = Depends(get_db)
+        user_id: int, post: schemas.PostCreate, db: Session = Depends(get_db)
 ):
     return crud.create_user_post(db=db, post=post, user_id=user_id)
 
