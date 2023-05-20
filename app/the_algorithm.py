@@ -26,7 +26,7 @@ def get_posts_from_tag(db: Session, user_id: int):
             for posttag in post.tags:
                 if tag.name == posttag.name:
                     counter += 1
-        ret.append({"post" : post, "count" : counter})
+        ret.append({"post": post, "count": counter})
 
     print(ret)
 

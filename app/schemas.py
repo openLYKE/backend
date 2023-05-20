@@ -43,11 +43,29 @@ class PostCreate(PostBase):
     pass
 
 
+class LikeBase(BaseModel):
+    pass
+
+
+class LikeCreate(LikeBase):
+    pass
+
+
+class Like(LikeBase):
+    id: int
+    post_id: int
+    user_id: int
+
+    class Config:
+        orm_mode = True
+
+
 class Post(PostBase):
     id: int
     owner_id: int
     tags: list[TagPost] = []
     photo_url: str = ""
+    likes: list[Like] = []
 
     class Config:
         orm_mode = True
@@ -65,6 +83,7 @@ class User(UserBase):
     id: int
     posts: list[Post] = []
     tags: list[TagUser] = []
+    likes: list[Like] = []
 
     class Config:
         orm_mode = True
