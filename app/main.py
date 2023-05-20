@@ -53,11 +53,25 @@ def create_item_for_user(
     return crud.create_user_post(db=db, post=post, user_id=user_id)
 
 
+@app.put("/users/{user_id}/tags")
+def update_user_tags(user_id: int, tag: schemas.TagUser, db: Session = Depends(get_db)):
+    return crud.update_user_tags(db=db, user_id=user_id, tags=tag)
+
+
 @app.get("/posts/", response_model=list[schemas.Post])
 def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     items = crud.get_posts(db, skip=skip, limit=limit)
     return items
 
+
+@app.get("/tags/{tag_id}", response_model=list[schemas.TagUser | schemas.TagPost])
+def read_tags(tag_id: int, db: Session = Depends(get_db)):
+    items = crud.get_tags(db, skip=0, limit=42069)
+    return items
+
+@app.get("/sql")
+def sql(db: Session = Depends(get_db)):
+    return db.execute("SELECT * FROM users")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=os.getenv(
