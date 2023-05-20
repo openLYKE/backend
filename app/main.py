@@ -74,15 +74,18 @@ def test(user_id: int, db: Session = Depends(get_db)):
 
 @app.get("/sql")
 def sql(db: Session = Depends(get_db)):
+    my_id = 1
     rs = db.execute(text("""
-    select post_id as id, count(post_id) as count from likes
-        group by likes.post_id
-        order by count(post_id) desc
+    select p.*
+    from posts p, follows f, likes l
+    where f.user_id = 1
+    and f.follows_id = l.user_id
+    and l.post_id = p.id
     """))
 
     ret = []
     for row in rs:
-        ret.append({"id": row.id, "count": row.count})
+        ret.append({"id": row.id, "count": row.title})
     return ret
 
 
