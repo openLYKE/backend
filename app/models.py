@@ -58,6 +58,10 @@ class Post(Base):
     likes = relationship("Like", back_populates="post")
     reason = "i like this post because..."
 
+
+    def __repr__(self) -> str:
+        return f"Post(id={self.id}, photo_url={self.photo_url}, title={self.title}, description={self.description}, owner_id={self.owner_id}, owner={self.owner}, tags={self.tags}, likes={self.likes})"
+
 class Like(Base):
     __tablename__ = "likes"
     id = Column(Integer, primary_key=True, index=True)
