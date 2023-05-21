@@ -56,7 +56,7 @@ class Post(Base):
     owner = relationship("User", back_populates="posts")
     tags = relationship("TagPost", back_populates="owner")
     likes = relationship("Like", back_populates="post")
-
+    reason = "i like this post because..."
 
 class Like(Base):
     __tablename__ = "likes"
