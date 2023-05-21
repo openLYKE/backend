@@ -99,31 +99,33 @@ def recommender_system(db, user_id, rand: float, popular: float, friends: float,
     amount_posts = 100
     posts = []
 
-    if rand != 0:
+    if rand != 0.0:
         amount_random_posts = int(amount_posts * rand)
         random_posts = get_random_posts(db)[:amount_random_posts]
-        posts.append(random_posts)
+        posts += random_posts
 
-    if popular != 0:
+    if popular != 0.0:
         amount_popular_posts = int(amount_posts * popular)
         popular_posts = get_popular_posts(db)[:amount_popular_posts]
-        posts.append(popular_posts)
+        posts += popular_posts
 
-    if friends != 0:
+    if friends != 0.0:
         amount_friends_posts = int(amount_posts * friends)
         friends_post = get_friends_posts(db, user_id)[:amount_friends_posts]
-        posts.append(friends_post)
+        posts += friends_post
 
-    if tags != 0:
+    if tags != 0.0:
         amount_tag_posts = int(amount_posts * tags)
         tags_posts = get_tags_posts(db, tags_2)[:amount_tag_posts]
-        posts.append(tags_posts)
+        posts += tags_posts
 
         # if the user has activated tags, we will filter the negative tags
 
         final = []
+        print(f"{posts=}")
 
         for post in posts:
+            # dbtags = db.query(models.TagUser).filter(models.TagUser.owner_id == post.id).all()
             try:
                 print(post)
                 for tag in post.tags:
@@ -136,6 +138,9 @@ def recommender_system(db, user_id, rand: float, popular: float, friends: float,
                         final.append(post)
             except:
                 continue
+
+
+        print(f"{final=}")
 
         return final
 
