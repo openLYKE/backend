@@ -10,7 +10,7 @@ class TagUserCreate(TagUserBase):
     pass
 
 
-class TagUser(TagUserCreate):
+class TagUser(TagUserBase):
     id: int
     owner_id: int
 
@@ -26,21 +26,12 @@ class TagPostCreate(TagPostBase):
     pass
 
 
-class TagPost(TagPostCreate):
+class TagPost(TagPostBase):
     id: int
     owner_id: int
 
     class Config:
         orm_mode = True
-
-
-class PostBase(BaseModel):
-    title: str = ""
-    description: str = ""
-
-
-class PostCreate(PostBase):
-    pass
 
 
 class FollowBase(BaseModel):
@@ -51,13 +42,14 @@ class FollowCreate(FollowBase):
     pass
 
 
-class Follow(FollowCreate):
+class Follow(FollowBase):
     id: int
     user_id: int
     follows_id: int
 
     class Config:
         orm_mode = True
+
 
 class LikeBase(BaseModel):
     pass
@@ -74,6 +66,15 @@ class Like(LikeBase):
 
     class Config:
         orm_mode = True
+
+
+class PostBase(BaseModel):
+    title: str = ""
+    description: str = ""
+
+
+class PostCreate(PostBase):
+    pass
 
 
 class Post(PostBase):
