@@ -45,16 +45,23 @@ def get_tags_posts(db: Session, tags):
                     counter += 1
                     post_tags.append(posttag.name)
         post.title = "tags"
-        post.description = "This Post was chosen because it has the tags: " + ", ".join(post_tags) + " and you chose these tags."
+        tags_text = ""
+        for posttags in post_tags:
+            tags_text += posttags + ", "
+        post.description = "This Post was chosen because it has the tags: " + tags_text + " and you chose these tags."
         ret.append({"post": post, "count": counter})
 
     ret.sort(key=lambda x: x["count"], reverse=True)
-    return ret
+
+    finalret = []
+    for i in ret:
+        finalret.append(i["post"]) 
+    return finalret
 
 
 def get_friends_posts(db: Session, user_id: int):
     rs = db.execute(text(f"""
-    select p.*
+    select p.id as id
     from posts p, follows f, likes l
     where f.user_id = {user_id}
     and f.follows_id = l.user_id
@@ -119,23 +126,23 @@ def recommender_system(db, user_id, rand: float, popular: float, friends: float,
         tags_posts = get_tags_posts(db, tags_2)[:amount_tag_posts]
         posts += tags_posts
 
-
         final = []
         print(f"{posts=}")
 
         for post in posts:
-            # dbtags = db.query(models.TagUser).filter(models.TagUser.owner_id == post.id).all()
-            try:
-                for tag in post.tags:
-                    clean = True
-                    for evil_tag in tags_0:
-                        if tag.name == evil_tag.name:
-                            clean = False
-                            break
-                if clean:
-                    final.append(post)
-            except:
-                continue
+            print(post)
+            print("_________________________________")
+            dbtags = db.query(models.TagUser).filter(models.TagUser.owner_id == post.id).all()
+            clean = True
+
+            for tag in dbtags:
+                for evil_tag in tags_0:
+                    if tag.name == evil_tag.name:
+                        clean = False
+                        break
+            if clean:
+                final.append(post)
+
 
 
         print(f"{final=}")
