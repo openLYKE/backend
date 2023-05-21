@@ -37,9 +37,5 @@ def create_user_post(db: Session, post: schemas.PostCreate, user_id: int):
 
 
 def get_user_feed(db: Session, user_id: int):
+    return
 
-
-    posts = db.query(models.Post).offset()
-
-
-    pass

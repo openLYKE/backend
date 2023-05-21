@@ -63,7 +63,7 @@ def seperate_tags(tags: list[schemas.TagUser]):
 def recommender_system(db, user_id, rand: float, popular: float, friends: float, tags: float):
     user_tags = db.query(models.TagUser).filter(models.TagUser.owner_id == user_id).all()
 
-    tags_0, tags_1, tags_2  = seperate_tags(user_tags)
+    tags_0, tags_1, tags_2 = seperate_tags(user_tags)
 
     amount_posts = 100
     posts = []
@@ -102,7 +102,6 @@ def recommender_system(db, user_id, rand: float, popular: float, friends: float,
                 if clean:
                     final.append(post)
 
+        return final
 
-
-
-    return final
+    return posts
