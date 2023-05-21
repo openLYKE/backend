@@ -67,9 +67,9 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return posts
 
 
-@app.get("/algo/{user_id}")
-def test(user_id: int, db: Session = Depends(get_db)):
-    return the_algorithm.get_popular_posts(db)
+@app.get("/algo/{user_id}/{rand}/{popular}/{friends}/{tags}")
+def test(user_id: int, rand: float, popular: float, friends: float, tags: float, db: Session = Depends(get_db)):
+    return the_algorithm.recommender_system(db, user_id, rand, popular, friends, tags)
 
 
 @app.get("/sql", response_model=list[schemas.Post])
@@ -90,7 +90,8 @@ def sql(db: Session = Depends(get_db)):
     final = []
     for i in ret:
         post = crud.get_post(db, post_id=i)
-        post.description = "This is a post"
+        post.title = "friends"
+        post.description = "This Post was chosen becaus your friend REPLACEME liked it!"
         final.append(post)
 
     return final

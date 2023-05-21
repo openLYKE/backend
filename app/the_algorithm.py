@@ -3,10 +3,15 @@ from sqlalchemy.orm import Session
 
 import models
 import schemas
+import crud
 
 
 def get_random_posts(db: Session):
-    return db.query(models.Post).order_by(func.random()).limit(100).all()
+    ret = db.query(models.Post).order_by(func.random()).limit(100).all()
+    for post in ret:
+        post.description = "This Post was randomly chosen from all possible posts."
+        post.title = "rand"
+    return ret
 
 
 def get_popular_posts(db: Session):
@@ -18,7 +23,10 @@ def get_popular_posts(db: Session):
 
     posts = []
     for row in rs:
-        posts.append(db.query(models.Post).filter(models.Post.id == row.id).first())
+        post = db.query(models.Post).filter(models.Post.id == row.id).first()
+        post.title = "popular"
+        post.description = "This Post was chosen because it has a lot of likes in our community."
+        posts.append(post)
 
     return posts
 
@@ -30,18 +38,48 @@ def get_tags_posts(db: Session, tags):
 
     for post in posts:
         counter = 0
+        post_tags = []
         for tag in tags:
             for posttag in post.tags:
                 if tag.name == posttag.name:
                     counter += 1
+                    post_tags.append(posttag.name)
+        post.title = "tags"
+        tags_text = ""
+        for posttags in post_tags:
+            tags_text += posttags + ", "
+        post.description = "This Post was chosen because it has the tags: " + tags_text + " and you chose these tags."
         ret.append({"post": post, "count": counter})
 
     ret.sort(key=lambda x: x["count"], reverse=True)
-    return ret
+
+    finalret = []
+    for i in ret:
+        finalret.append(i["post"]) 
+    return finalret
 
 
-def get_friends_posts(db):
-    pass
+def get_friends_posts(db: Session, user_id: int):
+    rs = db.execute(text(f"""
+    select p.id as id
+    from posts p, follows f, likes l
+    where f.user_id = {user_id}
+    and f.follows_id = l.user_id
+    and l.post_id = p.id
+    """))
+
+    ret = []
+    for row in rs:
+        ret.append(row.id)
+
+    final = []
+    for i in ret:
+        post = crud.get_post(db, post_id=i)
+        post.title = "friends"
+        post.description = "This Post was chosen becaus your friend REPLACEME liked it!"
+        final.append(post)
+
+    return final
 
 
 def seperate_tags(tags: list[schemas.TagUser]):
@@ -68,39 +106,47 @@ def recommender_system(db, user_id, rand: float, popular: float, friends: float,
     amount_posts = 100
     posts = []
 
-    if rand != 0:
+    if rand != 0.0:
         amount_random_posts = int(amount_posts * rand)
         random_posts = get_random_posts(db)[:amount_random_posts]
-        posts.append(random_posts)
+        posts += random_posts
 
-    if popular != 0:
+    if popular != 0.0:
         amount_popular_posts = int(amount_posts * popular)
         popular_posts = get_popular_posts(db)[:amount_popular_posts]
-        posts.append(popular_posts)
+        posts += popular_posts
 
-    if friends != 0:
+    if friends != 0.0:
         amount_friends_posts = int(amount_posts * friends)
-        friends_post = get_friends_posts(db)[:amount_friends_posts]
-        posts.append(friends_post)
+        friends_post = get_friends_posts(db, user_id)[:amount_friends_posts]
+        posts += friends_post
 
-    if tags != 0:
+    if tags != 0.0:
         amount_tag_posts = int(amount_posts * tags)
         tags_posts = get_tags_posts(db, tags_2)[:amount_tag_posts]
-        posts.append(tags_posts)
-
-        # if the user has activated tags, we will filter the negative tags
+        posts += tags_posts
 
         final = []
+        print(f"{posts=}")
 
         for post in posts:
-            for tag in post.tags:
-                clean = True
+            print(post)
+            print("_________________________________")
+            dbtags = db.query(models.TagPost).filter(models.TagPost.owner_id == post.id).all()
+            clean = True
+
+            for tag in dbtags:
                 for evil_tag in tags_0:
                     if tag.name == evil_tag.name:
+                        print(f"{tag.name=} {evil_tag.name=}")
                         clean = False
                         break
-                if clean:
-                    final.append(post)
+            if clean:
+                final.append(post)
+
+
+
+        print(f"{final=}")
 
         return final
 
