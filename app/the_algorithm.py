@@ -132,12 +132,13 @@ def recommender_system(db, user_id, rand: float, popular: float, friends: float,
         for post in posts:
             print(post)
             print("_________________________________")
-            dbtags = db.query(models.TagUser).filter(models.TagUser.owner_id == post.id).all()
+            dbtags = db.query(models.TagPost).filter(models.TagPost.owner_id == post.id).all()
             clean = True
 
             for tag in dbtags:
                 for evil_tag in tags_0:
                     if tag.name == evil_tag.name:
+                        print(f"{tag.name=} {evil_tag.name=}")
                         clean = False
                         break
             if clean:
