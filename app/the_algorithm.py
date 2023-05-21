@@ -113,7 +113,6 @@ def recommender_system(db, user_id, rand: float, popular: float, friends: float,
         amount_friends_posts = int(amount_posts * friends)
         friends_post = get_friends_posts(db, user_id)[:amount_friends_posts]
         posts += friends_post
-        return posts
 
     if tags != 0.0:
         amount_tag_posts = int(amount_posts * tags)
