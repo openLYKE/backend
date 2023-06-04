@@ -1,7 +1,7 @@
 # backend
 
 The backend of the [Flutter-App](https://github.com/openLYKE/frontend).
-_Part of TUM Junge Akademie Science Hack 2023_
+_Part of TUM Junge Akademie Science Hack 2023_. Demo : https://openlyke.unexzellent.de
 
 # openLYKE
 
